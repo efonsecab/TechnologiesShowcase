@@ -18,6 +18,19 @@ namespace TechnologiesShowcase
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddEnvironmentVariables(prefix: "SERVER_");
+                config.AddUserSecrets<Program>(optional: true);
+                var configRoot = config.Build();
+                config.AddAzureAppConfiguration(options =>
+                {
+                    var azureAppConfigConnectionString =
+                        configRoot["AzureAppConfigConnectionString"];
+                    options
+                        .Connect(azureAppConfigConnectionString);
+                });
+            })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
