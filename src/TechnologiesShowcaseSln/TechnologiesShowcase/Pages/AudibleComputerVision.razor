@@ -1,0 +1,27 @@
+﻿@page "/AudibleComputerVision"
+<h3>Index</h3>
+
+<form>
+    <TechnologiesShowcase.Components.Spinners IsLoading="IsLoading"></TechnologiesShowcase.Components.Spinners>
+    <div class="row">
+        <div class="col">
+            <InputFile class="form-control" OnChange="@OnInputFileChange" accept="image/*"></InputFile>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @if (this.AudioBase64 != null)
+            {
+                <audio controls src="data:audio/mp3;base64, @AudioBase64" autoplay></audio>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @if (!String.IsNullOrWhiteSpace(this.ImageBase64))
+            {
+                <img class="img-thumbnail" src="data:image/png;base64, @this.ImageBase64" />
+            }
+        </div>
+    </div>
+</form>
