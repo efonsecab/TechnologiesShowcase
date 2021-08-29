@@ -1,0 +1,43 @@
+﻿@page "/InvoiceAnalysis"
+
+<form>
+    <TechnologiesShowcase.Components.Spinners IsLoading="IsLoading"></TechnologiesShowcase.Components.Spinners>
+    <div class="row">
+        <div class="col">
+            <InputFile class="form-control" OnChange="@OnInputFileChange" accept="image/*"></InputFile>
+        </div>
+    </div>
+    @if (this.InvoiceAnalysisResult != null)
+    {
+        foreach (var singleResultItem in this.InvoiceAnalysisResult.Value)
+        {
+            @foreach (var singleField in singleResultItem.Fields)
+            {
+                <div class="row">
+
+                    <div class="col">
+                        @if (singleField.Key == "Items")
+                        {
+                            <strong>@singleField.Key:</strong>
+                            <ul>
+                                @foreach (var singleListItem in singleField.Value.Value.AsList())
+                                {
+                                    var dictionary = singleListItem.Value.AsDictionary();
+                                    if (dictionary.TryGetValue("Amount",
+                                        out Azure.AI.FormRecognizer.Models.FormField formField))
+                                    {
+                                        <li><strong>Amount: </strong> @formField.Value.AsFloat()</li>
+                                    }
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <strong>@singleField.Key:</strong> @singleField.Value?.ValueData?.Text
+                        }
+                    </div>
+                </div>
+            }
+        }
+    }
+</form>

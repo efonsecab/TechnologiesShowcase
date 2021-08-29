@@ -1,3 +1,4 @@
+using Azure.AI.FormRecognizer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -8,6 +9,7 @@ using PTI.Microservices.Library.Configuration;
 using PTI.Microservices.Library.Interceptors;
 using PTI.Microservices.Library.Services;
 using PTI.Microservices.Library.Services.Specialized;
+using System;
 using System.Linq;
 
 namespace TechnologiesShowcase
@@ -59,6 +61,9 @@ namespace TechnologiesShowcase
             var azureMapsConfiguration =
                 Configuration.GetSection("AzureConfiguration:AzureMapsConfiguration").Get<PTI.Microservices.Library.Configuration.AzureMapsConfiguration>();
             services.AddSingleton(azureMapsConfiguration);
+            var azureFormsRecognizerConfiguration =
+                Configuration.GetSection("AzureConfiguration:AzureFormsRecognizerConfiguration");
+            services.AddSingleton(azureFormsRecognizerConfiguration);
             services.AddHttpClient();
             services.AddTransient<CustomHttpClientHandler>();
             services.AddTransient<CustomHttpClient>();
@@ -76,6 +81,11 @@ namespace TechnologiesShowcase
             services.AddTransient<AudibleWeatherService>();
             services.AddTransient<AudibleComputerVisionService>();
             services.AddTransient<AudibleTwitterService>();
+            services.AddTransient<FormRecognizerClient>(sp=>new FormRecognizerClient(
+                new Uri(azureFormsRecognizerConfiguration["Endpoint"]),
+                new Azure.AzureKeyCredential(azureFormsRecognizerConfiguration["Key"])) 
+            { 
+            });
             //services.AddSingleton<ILogger<FilteringMessage>, MessagePersistenceLogger>();
             //services.AddSingleton<IImageStreamRetriever, ImageStreamRetriever>();
             services.AddControllersWithViews();
