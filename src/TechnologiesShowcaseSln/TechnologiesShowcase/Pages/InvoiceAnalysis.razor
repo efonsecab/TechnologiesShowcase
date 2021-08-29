@@ -22,12 +22,31 @@
                             <ul>
                                 @foreach (var singleListItem in singleField.Value.Value.AsList())
                                 {
-                                    var dictionary = singleListItem.Value.AsDictionary();
-                                    if (dictionary.TryGetValue("Amount",
-                                        out Azure.AI.FormRecognizer.Models.FormField formField))
-                                    {
-                                        <li><strong>Amount: </strong> @formField.Value.AsFloat()</li>
+                                <li>
+                                    @{
+                                        var dictionary = singleListItem.Value.AsDictionary();
+                                        if (dictionary.TryGetValue("Description",
+                                        out Azure.AI.FormRecognizer.Models.FormField descriptionField))
+                                        {
+                                            <strong>Description: </strong> @descriptionField.Value.AsString()
+                                        }
+                                        if (dictionary.TryGetValue("UnitPrice",
+                                        out Azure.AI.FormRecognizer.Models.FormField unitPriceField))
+                                        {
+                                            <strong> Unit Price: </strong> @unitPriceField.Value.AsFloat()
+                                        }
+                                        if (dictionary.TryGetValue("Quantity",
+                                        out Azure.AI.FormRecognizer.Models.FormField quantityField))
+                                        {
+                                            <strong> Quantity: </strong> @unitPriceField.Value.AsFloat()
+                                        }
+                                        if (dictionary.TryGetValue("Amount",
+                                        out Azure.AI.FormRecognizer.Models.FormField amountField))
+                                        {
+                                            <strong> Amount: </strong> @amountField.Value.AsFloat()
+                                        }
                                     }
+                                </li>
                                 }
                             </ul>
                         }
