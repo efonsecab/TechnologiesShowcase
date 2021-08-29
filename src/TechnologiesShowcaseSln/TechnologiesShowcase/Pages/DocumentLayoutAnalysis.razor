@@ -1,0 +1,36 @@
+﻿@page "/DocumentLayoutAnalysis"
+
+<form>
+    <TechnologiesShowcase.Components.Spinners IsLoading="IsLoading"></TechnologiesShowcase.Components.Spinners>
+    <div class="row">
+        <div class="col">
+            <InputFile class="form-control" OnChange="@OnInputFileChange" accept="image/*"></InputFile>
+        </div>
+    </div>
+    @if (this.DocumentAnalysisResult != null)
+    {
+        <strong>Pages</strong>
+        foreach (var singleFormPage in this.DocumentAnalysisResult.Value)
+        {
+            <strong>Page @singleFormPage.PageNumber</strong>
+            <strong>Lines</strong>
+            @foreach (var singlePageLine in singleFormPage.Lines)
+            {
+                <div class="row">
+                    <div class="col">
+                        @singlePageLine.Text
+                    </div>
+                </div>
+            }
+            <strong>Tables</strong>
+            @foreach (var singleTable in singleFormPage.Tables)
+            {
+                <div class="row">
+                    <div class="col">
+                        @singleTable.Cells[0].Text
+                    </div>
+                </div>
+            }
+        }
+    }
+</form>
